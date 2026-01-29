@@ -2,7 +2,7 @@ const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
 
 const manifest = {
     id: 'community.vidrock.addon',
-    version: '1.0.0',
+    version: '1.0.1',
     name: 'VidRock Addon',
     description: 'Watch movies and series from VidRock.net directly in Stremio',
     resources: ['stream'],
@@ -21,9 +21,13 @@ builder.defineStreamHandler((args) => {
 
     if (type === 'movie') {
         // id is usually IMDB ID like tt1234567
+        const imdbId = id;
+        
         streams.push({
             title: 'VidRock Player',
-            externalUrl: `https://vidrock.net/movie/${id}`
+            url: `https://vidrock.net/movie/${imdbId}`,
+            isHLS: false,
+            isWebRTC: false
         });
     } else if (type === 'series') {
         // id is usually IMDB ID with season and episode: tt1234567:1:1
@@ -34,7 +38,9 @@ builder.defineStreamHandler((args) => {
         
         streams.push({
             title: 'VidRock Player',
-            externalUrl: `https://vidrock.net/tv/${imdbId}/${season}/${episode}`
+            url: `https://vidrock.net/tv/${imdbId}/${season}/${episode}`,
+            isHLS: false,
+            isWebRTC: false
         });
     }
 
